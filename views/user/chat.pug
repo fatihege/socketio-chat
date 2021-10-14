@@ -1,0 +1,46 @@
+extends ../layouts/socket
+
+block styles
+    link(rel="stylesheet" href="/css/chat.css")
+
+block content
+    .curtain
+    .chat-container
+        .header
+            .name Fatih
+            .help
+                a(href="/help" target="_blank") Need help?
+        .chat
+            .channels
+                span.title Rooms
+                ul
+                    li
+                        a(href="#").active general
+            .messages
+            .users
+                .online.none
+                    span.title Online Users
+                    ul
+                .offline.none
+                    span.title Offline Users
+                    ul
+                .logout
+                    form(method="POST" action="/logout")
+                        input(type="hidden" name="_csrf" value=`${csrfToken}`)
+                        button(type="submit" data-modal="logout").btn.btn-danger-reversed Log Out
+        .form-container
+            .message-reply.none
+                .author
+                .content
+                .close
+                    .close-icon
+                        span
+                        span
+            form.message-form
+                textarea(name="message" rows="1" placeholder="Type a message..." autofocus="on")
+                button(type="submit").btn.btn-primary Send
+            .users-typing.hidden &nbsp;
+
+block script
+    script(src="/js/modals.js")
+    script(src="/js/chat.js")

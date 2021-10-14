@@ -1,0 +1,18 @@
+extends ../layouts/main
+
+block styles
+    link(rel="stylesheet" href="/css/form.css")
+
+block content
+    .form-container.login-form
+        if flashMessage
+            .alert.alert-danger #{flashMessage}
+
+        form(method="POST" action="/login")
+            input(type="hidden" name="_csrf" value=`${csrfToken}`)
+            input(type="email" name="email" placeholder="Email" value=`${inputValues ? inputValues.email : ''}` autofocus="on" autocomplete="off").input.input-primary
+            input(type="password" name="password" placeholder="Password" autocomplete="off").input.input-primary
+            button(type="submit").btn.btn-primary Login
+
+        p.info-text You don't have an account?&nbsp;
+            a(href="/register") Create one!

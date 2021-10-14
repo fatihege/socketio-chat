@@ -1,0 +1,63 @@
+.modal {
+    position: fixed;
+    width: 100%;
+    height: max-content;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    word-wrap: break-word;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-dark-3);
+    z-index: 5;
+    opacity: 1;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    box-shadow: 0 5px 25px rgba(29, 29, 29, 0.39);
+    transition-duration: 0.3s;
+    -webkit-transition-property: top, opacity;
+    -moz-transition-property: top, opacity;
+    -ms-transition-property: top, opacity;
+    -o-transition-property: top, opacity;
+    transition-property: top, opacity;
+}
+
+.modal.hidden {
+    top: 38%;
+    opacity: 0;
+}
+
+.modal .title {
+    width: 100%;
+    padding: 10px 14px;
+    color: var(--color-grey-light);
+    background: rgba(255, 255, 255, 0.05);
+    cursor: default;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.modal .content {
+    width: 100%;
+    padding: 10px 14px;
+    color: var(--color-grey-too-light);
+    cursor: default;
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.modal .buttons {
+    width: 100%;
+    padding: 10px 14px;
+    display: flex;
+    justify-content: space-between;
+}

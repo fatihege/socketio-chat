@@ -1,0 +1,12 @@
+extends ../layouts/main
+
+block styles
+    link(rel="stylesheet" href="/css/error.css")
+
+block content
+    .error-container
+        .error
+            .title 404
+            .message Page Not Found
+            .return
+                a(href="/").btn.btn-primary Go home

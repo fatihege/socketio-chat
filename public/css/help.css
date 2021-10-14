@@ -1,0 +1,26 @@
+.help-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.help-container .help {
+    word-wrap: unset;
+    cursor: default;
+    font-size: 14em;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.help-container .help strong {
+    display: inline;
+    font-weight: 900;
+}
+
+.help-container .return a {
+    display: block;
+    min-width: 200px;
+}
