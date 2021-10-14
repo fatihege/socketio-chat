@@ -236,6 +236,10 @@
     display: none;
 }
 
+.chat-container .chat .messages .message.with-reply.no-author > .author {
+    display: block;
+}
+
 .chat-container .chat .messages .message.own {
     background: var(--color-dark-3);
 }

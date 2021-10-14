@@ -115,6 +115,7 @@ function addMessage(message, first) {
         elem.innerHTML = '<div class="reply reply-' + message.reply._id + '"><a href="#message-' + message.reply._id +
             '"><div class="author">' + escapeHTMLTags(message.reply.user.username) + '</div><div class="content">' +
             escapeHTMLTags(message.reply.content) + '</div></a></div>' + elem.innerHTML;
+        elem.classList.add('with-reply')
     }
 
     elem.innerHTML = elem.innerHTML + addMessageOperations(message._id);
@@ -125,6 +126,10 @@ function addMessage(message, first) {
 
     if (noAuthor) {
         elem.classList.add('no-author');
+    }
+
+    if (message.reply && message.reply.user._id === getCookie('hashed_id')) {
+        elem.classList.add('mention');
     }
 
     setTimeout(function () {
