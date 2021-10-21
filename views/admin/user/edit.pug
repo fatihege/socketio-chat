@@ -1,0 +1,28 @@
+extends ../../layouts/admin
+
+block styles
+    link(rel="stylesheet" href="/css/form.css")
+    link(rel="stylesheet" href="/css/admin/users.css")
+
+block content
+    .form-container.edit-user-form
+        h1.form-title Edit User
+
+        if successMessage
+            .alert.alert-success #{successMessage}
+        else if flashMessage
+            .alert.alert-danger #{flashMessage}
+
+        form(method="POST" action="/admin/users/edit")
+            input(type="hidden" name="_csrf" value=`${csrfToken}`)
+            input(type="hidden" name="_id" value=`${user._id}`)
+            input(type="text" name="username" placeholder="Username" value=`${user.username}` autofocus="on").input.input-primary
+            input(type="email" name="email" placeholder="Email" value=`${user.email}` autofocus="on").input.input-primary
+            each role in roles
+                .checkbox-group
+                    if user.roles.find((r) => r._id.toString() === role._id.toString())
+                        input(type="checkbox" id=`role[${role._id.toString()}]` name=`role[${role._id.toString()}]` checked="checked")
+                    else
+                        input(type="checkbox" id=`role[${role._id.toString()}]` name=`role[${role._id.toString()}]`)
+                    label(for=`role[${role._id.toString()}]`) #{role.name}
+            button(type="submit").btn.btn-primary Save User

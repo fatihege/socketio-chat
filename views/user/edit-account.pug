@@ -1,0 +1,18 @@
+extends ../layouts/main
+
+block styles
+    link(rel="stylesheet" href="/css/form.css")
+
+block content
+    .form-container.edit-account-form
+        h1.form-title Edit Account
+
+        if flashMessage
+            .alert.alert-danger #{flashMessage}
+
+        form(method="POST" action="/edit-account")
+            input(type="hidden" name="_csrf" value=`${csrfToken}`)
+            input(type="text" name="username" placeholder="Username" value=`${username}` autocomplete="off").input.input-primary
+            button(type="submit").btn.btn-primary Save
+        br
+        a(href="/chat").btn.btn-primary-reversed Go Back

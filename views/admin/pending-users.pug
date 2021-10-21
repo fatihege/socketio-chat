@@ -1,0 +1,29 @@
+extends ../layouts/admin
+
+block styles
+    link(rel="stylesheet" href="/css/admin/users.css")
+
+block content
+    .curtain
+    if successMessage
+        .alert.alert-success #{successMessage}
+    else if flashMessage
+        .alert.alert-danger #{flashMessage}
+    .users-container
+        if !users.length
+            h3.info-text No pending users.
+        else
+            each user in users
+                .user
+                    .info
+                        .name
+                            a(href=`/admin/users/${user._id}`) #{user.username}
+                    .actions
+                        form(method="POST" action=`/admin/users/activate`)
+                            input(type="hidden" name="_csrf" value=`${csrfToken}`)
+                            button(type="submit" data-modal="activate-user" data-modal-values=`{"id":"${user._id}"}`).btn.btn-primary-reversed Activate
+                        form(method="POST" action=`/admin/users/delete`)
+                            input(type="hidden" name="_csrf" value=`${csrfToken}`)
+                            button(type="submit" data-modal="delete-user" data-modal-values=`{"id":"${user._id}"}`).btn.btn-danger-reversed Delete
+block script
+    script(src="/js/modals.js")

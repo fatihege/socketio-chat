@@ -1,0 +1,59 @@
+extends ../../layouts/admin
+
+block styles
+    link(rel="stylesheet" href="/css/form.css")
+    link(rel="stylesheet" href="/css/admin/roles.css")
+
+block content
+    .form-container.create-role-form
+        h1.form-title Create Role
+
+        if maxRoleCount
+            .alert.alert-warning A server can have up to 50 roles.
+        else
+            if successMessage
+                .alert.alert-success #{successMessage}
+            else if flashMessage
+                .alert.alert-danger #{flashMessage}
+
+            form(method="POST" action="/admin/roles/create")
+                input(type="hidden" name="_csrf" value=`${csrfToken}`)
+                input(type="text" name="name" placeholder="Name" value=`${inputValues ? inputValues.name : ''}` autofocus="on").input.input-primary
+                input(type="text" name="color" placeholder="Color" value=`${inputValues ? inputValues.name : ''}` autofocus="on").input.input-primary
+                .checkbox-group
+                    input(type="checkbox" id="administrator" name="administrator")
+                    label(for="administrator") Administrator
+                .checkbox-group
+                    input(type="checkbox" id="view_rooms" name="view_rooms")
+                    label(for="view_rooms") View Rooms
+                .checkbox-group
+                    input(type="checkbox" id="send_messages" name="send_messages")
+                    label(for="send_messages") Send Messages
+                .checkbox-group
+                    input(type="checkbox" id="see_message_history" name="see_message_history")
+                    label(for="see_message_history") See Message History
+                .checkbox-group
+                    input(type="checkbox" id="mention_everyone" name="mention_everyone")
+                    label(for="mention_everyone") Mention @everyone
+                .checkbox-group
+                    input(type="checkbox" id="ban_users" name="ban_users")
+                    label(for="ban_users") Ban Users
+                .checkbox-group
+                    input(type="checkbox" id="manage_messages" name="manage_messages")
+                    label(for="manage_messages") Manage Messages
+                .checkbox-group
+                    input(type="checkbox" id="manage_rooms" name="manage_rooms")
+                    label(for="manage_rooms") Manage Rooms
+                .checkbox-group
+                    input(type="checkbox" id="manage_server" name="manage_server")
+                    label(for="manage_server") Manage Server
+                .checkbox-group
+                    input(type="checkbox" id="manage_roles" name="manage_roles")
+                    label(for="manage_roles") Manage Roles
+                .checkbox-group
+                    input(type="checkbox" id="manage_users" name="manage_users")
+                    label(for="manage_users") Manage Users
+                .checkbox-group
+                    input(type="checkbox" id="register_user" name="register_user")
+                    label(for="register_user") Register User
+                button(type="submit").btn.btn-primary Save Role

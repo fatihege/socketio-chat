@@ -1,7 +1,7 @@
 {
   "name": "socketio-chat",
   "description": "",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "main": "index.js",
   "directories": {
     "lib": "lib"
@@ -17,7 +17,7 @@
   },
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "connect-mongodb-session": "^3.1.1",
     "cookie-parser": "^1.4.5",
@@ -25,7 +25,9 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
+    "mathjs": "^9.5.1",
     "mongoose": "^6.0.10",
+    "nanoid": "^3.1.30",
     "pug": "^3.0.2",
     "socket.io": "^4.2.0"
   },

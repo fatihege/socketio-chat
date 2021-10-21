@@ -1,0 +1,76 @@
+@import "../modals.css";
+
+.create-user {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--color-dark-2);
+    padding-bottom: 12px;
+}
+
+.alert {
+    margin-bottom: 8px;
+}
+
+.users-container {
+    width: 100%;
+}
+
+.users-container .user {
+    width: 100%;
+    padding: 8px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: default;
+    margin-bottom: 4px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.users-container .user:hover {
+    background: var(--color-dark-3);
+}
+
+.users-container .user .info {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.users-container .user .info .color {
+    width: 20px;
+    height: 20px;
+    -webkit-border-radius: 100%;
+    -moz-border-radius: 100%;
+    border-radius: 100%;
+}
+
+.users-container .user .info .name {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-grey-too-light);
+    margin-left: 8px;
+    width: 100%;
+}
+
+.users-container .user .info .name a {
+    color: var(--color-grey-too-light);
+    text-decoration: none;
+    display: inline-block;
+    width: 100%;
+}
+
+.users-container .user .actions {
+    display: flex;
+}
+
+.users-container .user .actions form {
+    margin-left: 4px;
+}
+
+.container .content .form-container.create-user-form {
+    top: 20px;
+    padding-bottom: 20px;
+}

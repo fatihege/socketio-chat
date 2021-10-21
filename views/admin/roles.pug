@@ -1,0 +1,33 @@
+extends ../layouts/admin
+
+block styles
+    link(rel="stylesheet" href="/css/admin/roles.css")
+
+block content
+    .curtain
+    .create-role
+        a(href="/admin/roles/create" class=`${maxRoleCount ? 'disabled' : ''}`).btn.btn-primary Create
+    if successMessage
+        .alert.alert-success #{successMessage}
+    else if flashMessage
+        .alert.alert-danger #{flashMessage}
+    .roles-container
+        each role in roles
+            if role.defaultRole
+                .role
+                    .info
+                        .color(style='background-color: #ffffff;')
+                        .name #{role.name}
+            else
+                .role
+                    .info
+                        .color(style=`background-color: #${role.color || 'ffffff'};`)
+                        .name
+                            a(href=`/admin/roles/${role._id}`) #{role.name}
+                    .actions
+                        a(href=`/admin/roles/${role._id}`).btn.btn-primary-reversed Edit
+                        form(method="POST" action=`/admin/roles/delete`)
+                            input(type="hidden" name="_csrf" value=`${csrfToken}`)
+                            button(type="submit" data-modal="delete-role" data-modal-values=`{"id":"${role._id}"}`).btn.btn-danger-reversed Delete
+block script
+    script(src="/js/modals.js")

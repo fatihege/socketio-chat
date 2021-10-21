@@ -6,7 +6,7 @@ block styles
 block content
     .error-container
         .error
-            .title 404
-            .message Page Not Found
+            .title #{code}
+            .message #{message}
             .return
-                a(href="/").btn.btn-primary Go home
+                a(href=`/${admin ? 'admin' : ''}`).btn.btn-primary Go Back

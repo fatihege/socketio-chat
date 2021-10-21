@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+span.bold {
+    font-weight: 700;
+}
+
+span.italic {
+    font-style: italic;
+}
+
+span.underline {
+    text-decoration: underline;
+}
+
+span.strikethrough {
+    text-decoration: line-through;
+}
+
+span.code {
+    font-family: "Noto Sans Mono", monospace, var(--font-default);
+    display: inline-block;
+    background: rgba(0, 0, 0, 0.31);
+    color: #ffffff;
+    padding: 2px 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+span.blockquote {
+    display: block;
+    width: 100%;
+    padding: 7px 5px;
+    background: rgba(0, 0, 0, 0.18);
+    border-left: 3px solid rgba(0, 0, 0, 0.44);
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+span.code * {
+    font-family: "Noto Sans Mono", monospace, var(--font-default);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 400;
+}

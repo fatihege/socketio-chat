@@ -5,16 +5,21 @@ block styles
 
 block content
     .form-container.register-form
-        if flashMessage
+        h1.form-title Register
+
+        if !registrable
+            .alert.alert-warning Registrations on this server are closed.
+        else if flashMessage
             .alert.alert-danger #{flashMessage}
 
-        form(method="POST" action="/register")
-            input(type="hidden" name="_csrf" value=`${csrfToken}`)
-            input(type="text" name="username" placeholder="Username" value=`${inputValues ? inputValues.username : ''}` autofocus="on").input.input-primary
-            input(type="email" name="email" placeholder="Email" value=`${inputValues ? inputValues.email : ''}`).input.input-primary
-            input(type="password" name="password" placeholder="Password").input.input-primary
-            input(type="password" name="password_confirm" placeholder="Confirm Password").input.input-primary
-            button(type="submit").btn.btn-primary Register
+        if registrable
+            form(method="POST" action="/register")
+                input(type="hidden" name="_csrf" value=`${csrfToken}`)
+                input(type="text" name="username" placeholder="Username" value=`${inputValues ? inputValues.username : ''}` autofocus="on").input.input-primary
+                input(type="email" name="email" placeholder="Email" value=`${inputValues ? inputValues.email : ''}`).input.input-primary
+                input(type="password" name="password" placeholder="Password").input.input-primary
+                input(type="password" name="password_confirm" placeholder="Confirm Password").input.input-primary
+                button(type="submit").btn.btn-primary Register
 
-        p.info-text Already have an account?&nbsp;
+        p.info-text #{!registrable ? 'Already an admin?' : 'Already have an account?'} &nbsp;
             a(href="/login") Login

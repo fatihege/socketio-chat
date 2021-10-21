@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+html(lang="en")
+    include ../includes/admin-head
+    body
+        .container
+            .sidebar
+                ul
+                    if userPermissions[validPermissions.MANAGE_SERVER]
+                        li
+                            a(href="/admin/settings" class=`${path === '/settings' ? 'active' : ''}`) Settings
+                    if userPermissions[validPermissions.MANAGE_ROOMS]
+                        li
+                            a(href="/admin/rooms" class=`${path === '/rooms' ? 'active' : ''}`) Rooms
+                                span.badge #{counts.rooms || 0}
+                    if userPermissions[validPermissions.MANAGE_USERS]
+                        li
+                            a(href="/admin/users" class=`${path === '/users' ? 'active' : ''}`) Users
+                                span.badge #{counts.users || 0}
+                        li
+                            a(href="/admin/pending-users" class=`${path === '/pending-users' ? 'active' : ''}`) Pending Users
+                                span.badge #{counts.pendingUsers || 0}
+                        li
+                            a(href="/admin/bans" class=`${path === '/bans' ? 'active' : ''}`) Banned Users
+                                span.badge #{counts.bannedUsers || 0}
+                    if userPermissions[validPermissions.REGISTER_USER]
+                        li
+                            a(href="/admin/register-user" class=`${path === '/register-user' ? 'active' : ''}`) Register User
+                    if userPermissions[validPermissions.MANAGE_ROLES]
+                        li
+                            a(href="/admin/roles" class=`${path === '/roles' ? 'active' : ''}`) Roles
+                                span.badge #{counts.roles || 0}
+                    if userPermissions[validPermissions.MANAGE_MESSAGES]
+                        li
+                            a(href="/admin/messages" class=`${path === '/messages' ? 'active' : ''}`) Messages
+
+            .content
+                block content
+                
+        include ../includes/script

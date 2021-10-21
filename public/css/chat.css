@@ -1,4 +1,5 @@
 @import "modals.css";
+@import "animations.css";
 
 .chat-container {
     width: 100%;
@@ -20,6 +21,19 @@
     padding: 0 15px;
 }
 
+.chat-container span.badge {
+    display: inline-block;
+    padding: 3px 5px;
+    background: var(--color-primary-dark);
+    color: var(--color-grey-too-light);
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    font-weight: 500;
+    margin-right: 8px;
+    font-size: 14px;
+}
+
 .chat-container .header .help a {
     text-decoration: none;
     color: var(--color-grey-light);
@@ -37,27 +51,29 @@
     height: calc(100vh - 36px);
 }
 
-.chat-container .chat .channels, .chat-container .chat .users {
+.chat-container .chat .rooms, .chat-container .chat .users {
     width: 244px;
-    padding: 10px;
     overflow-y: auto;
     overflow-x: hidden;
     background: var(--color-too-dark);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-.chat-container .chat .channels span.title, .chat-container .chat .users span.title {
+.chat-container .chat .rooms .list span.title, .chat-container .chat .users .list span.title {
     font-weight: 500;
     color: var(--color-grey-too-light);
     cursor: default;
     opacity: 0.9;
 }
 
-.chat-container .chat .channels ul, .chat-container .chat .users ul {
+.chat-container .chat .rooms .list ul, .chat-container .chat .users .list ul {
     list-style-type: none;
     margin-top: 10px;
 }
 
-.chat-container .chat .channels ul li a, .chat-container .chat .users ul li a {
+.chat-container .chat .rooms .list ul li a, .chat-container .chat .users .list ul li a {
     display: block;
     width: 100%;
     padding: 5px 8px;
@@ -65,32 +81,71 @@
     -moz-border-radius: 5px;
     border-radius: 5px;
     text-decoration: none;
+    margin-bottom: 5px;
     color: var(--color-grey-light);
 }
 
-.chat-container .chat .channels ul li a:hover, .chat-container .chat .users ul li a:hover {
+.chat-container .chat .rooms .list ul li a:hover, .chat-container .chat .users .list ul li a:hover {
     background-color: var(--color-dark-3);
     color: #ffffff;
 }
 
-.chat-container .chat .channels ul li a.active, .chat-container .chat .users ul li a.active {
+.chat-container .chat .rooms .list ul li a.active, .chat-container .chat .users .list ul li a.active {
     background: var(--color-dark-blue-1);
     color: #ffffff;
 }
 
-.chat-container .chat .channels {
+.chat-container .chat .rooms {
     border-right: 1px solid var(--color-dark-blue-2);
+}
+
+.chat-container .chat .rooms .account {
+    padding: 10px;
+    z-index: 2;
+}
+
+.chat-container .chat .rooms .list {
+    padding: 10px;
+    min-height: calc(100% - 55px);
+    max-height: calc(100% - 55px);
+    overflow-y: scroll;
+    border-bottom: 1px solid var(--color-dark-blue-2);
+}
+
+.chat-container .chat .rooms.admin .list {
+    min-height: calc(100% - 90px);
+    max-height: calc(100% - 90px);
 }
 
 .chat-container .chat .users {
     border-left: 1px solid var(--color-dark-blue-2);
 }
 
-.chat-container .chat .users .offline {
+.chat-container .chat .users .logout  {
+    padding: 10px;
+    z-index: 2;
+}
+
+.chat-container .chat .users .logout form {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chat-container .chat .users .list  {
+    padding: 10px;
+    border-bottom: 1px solid var(--color-dark-blue-2);
+    min-height: calc(100% - 55px);
+    max-height: calc(100% - 55px);
+    overflow-y: scroll;
+}
+
+.chat-container .chat .users .list .offline {
     margin-top: 15px;
 }
 
-.chat-container .chat .users .logout {
+.chat-container .chat .users .list .logout {
     position: fixed;
     bottom: 10px;
     right: 10px;
@@ -104,6 +159,41 @@
     padding-top: 15px;
     padding-bottom: 100px;
     overflow-y: scroll;
+}
+
+.chat-container .chat .messages .loading {
+    width: 100%;
+    height: max-content;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+    -webkit-transition: opacity 0.2s ease-out;
+    -moz-transition: opacity 0.2s ease-out;
+    -ms-transition: opacity 0.2s ease-out;
+    -o-transition: opacity 0.2s ease-out;
+    transition: opacity 0.2s ease-out;
+}
+
+.chat-container .chat .messages .loading .icon {
+    width: 48px;
+    height: 48px;
+    border: 3px solid var(--color-grey-too-light);
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    -webkit-border-radius: 100%;
+    -moz-border-radius: 100%;
+    border-radius: 100%;
+    -webkit-animation: messages-loading linear infinite;
+    -o-animation: messages-loading linear infinite;
+    animation: messages-loading linear infinite;
+}
+
+.chat-container .chat .messages .loading .icon.animate {
+    -webkit-animation-duration: 0.5s;
+    -o-animation-duration: 0.5s;
+    animation-duration: 0.5s;
 }
 
 .chat-container .chat .messages .message {
@@ -281,10 +371,12 @@
 
 .chat-container .form-container .message-reply {
     width: calc(100% - (244px * 2) - 12px);
+    max-width: calc(100% - (244px * 2) - 12px);
     height: auto;
     background: var(--color-dark-blue-2);
-    padding: 8px 10px;
+    padding: 5px 8px;
     padding-right: 50px;
+    display: flex;
     cursor: default;
     position: relative;
     border-top: 1px solid rgba(255, 255, 255, 0.04);
@@ -311,7 +403,7 @@
 
 .chat-container .form-container .message-reply .close .close-icon span {
     display: block;
-    width: 20px;
+    width: 18px;
     height: 2px;
     background: var(--color-grey-light);
     -webkit-transform: rotate(45deg);
@@ -322,24 +414,26 @@
 }
 
 .chat-container .form-container .message-reply .close .close-icon span:last-child {
-    -webkit-transform: rotate(-45deg) translate(1px, -1px);
-    -moz-transform: rotate(-45deg) translate(1px, -1px);
-    -ms-transform: rotate(-45deg) translate(1px, -1px);
-    -o-transform: rotate(-45deg) translate(1px, -1px);
-    transform: rotate(-45deg) translate(1px, -1px);
+    -webkit-transform: rotate(-45deg) translate(1px, -2px);
+    -moz-transform: rotate(-45deg) translate(1px, -2px);
+    -ms-transform: rotate(-45deg) translate(1px, -2px);
+    -o-transform: rotate(-45deg) translate(1px, -2px);
+    transform: rotate(-45deg) translate(1px, -2px);
 }
 
 .chat-container .form-container .message-reply .author {
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--color-grey-light);
-    margin-bottom: 5px;
+    margin-right: 5px;
 }
 
 .chat-container .form-container .message-reply .content {
     font-size: 14px;
     font-weight: 400;
     color: var(--color-grey-too-light);
+    max-width: 100%;
+    word-break: break-word;
 }
 
 .chat-container .form-container form.message-form {
@@ -349,6 +443,7 @@
     width: calc(100% - (244px * 2) - 12px);
     padding: 10px 20px 0 20px;
     background: var(--color-dark);
+    z-index: 2;
 }
 
 .chat-container .form-container form.message-form textarea {
@@ -364,7 +459,7 @@
     caret-color: var(--color-grey-light);
     font-size: 14px;
     color: var(--color-grey-too-light);
-    font-weight: 500;
+    font-weight: 400;
     line-height: 20px;
 }
 
@@ -386,6 +481,7 @@
     width: calc(100% - (244px * 2) - 12px);
     text-align: left;
     cursor: default;
+    z-index: 1;
 }
 
 .chat-container .form-container .users-typing.hidden {

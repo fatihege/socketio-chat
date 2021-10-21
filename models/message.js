@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
+const nanoid = require('../utils/nanoid')();
 
 const messageSchema = new mongoose.Schema({
+    uuid: {
+        type: String,
+        default: () => nanoid()
+    },
     content: {
         type: String,
         required: true

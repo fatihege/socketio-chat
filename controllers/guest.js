@@ -1,6 +1,9 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const User = require('../models/user');
+const Role = require('../models/role');
 const validatePost = require('../utils/validate-post');
+const filterUsername = require('../utils/filter-username');
+require('dotenv').config();
 
 exports.getIndex = (req, res, next) => {
     if (req.user) {
@@ -13,6 +16,12 @@ exports.getIndex = (req, res, next) => {
 exports.getHelp = (req, res, next) => {
     res.render('guest/help', {
         title: 'Help'
+    });
+}
+
+exports.getBanned = (req, res, next) => {
+    res.render('guest/banned', {
+        title: 'You Are Banned'
     });
 }
 
@@ -85,9 +94,21 @@ exports.postLogin = (req, res, next) => {
                         return;
                     }
 
-                    bcrypt.compare(password, user.password)
-                        .then((result) => {
+                    bcrypt.compare(password + process.env.HASH_SALT_TEXT, user.password)
+                        .then(async (result) => {
                             if (result) {
+                                if (req.server.loginOnlyAdmins && !(await user.isAdmin())) {
+                                    req.session.flashMessage = 'Only administrators can login this server.';
+                                    req.session.inputValues = req.body;
+                                    return req.session.save((err) => {
+                                        if (err) {
+                                            console.error(err);
+                                        }
+
+                                        return res.redirect('/login');
+                                    });
+                                }
+
                                 req.session.user = user;
                                 req.session.isAuthenticated = true;
 
@@ -129,11 +150,16 @@ exports.getRegister = (req, res, next) => {
     res.render('guest/register', {
         title: 'Register',
         flashMessage,
-        inputValues
+        inputValues,
+        registrable: !!req.server.registrable,
     });
 }
 
 exports.postRegister = (req, res, next) => {
+    if (!req.server.registrable) {
+        return res.redirect('/register');
+    }
+
     const errors = validatePost(req.body, {
         username: {
             name: 'Username',
@@ -156,7 +182,7 @@ exports.postRegister = (req, res, next) => {
         }
     });
 
-    const username = req.body.username;
+    const username = filterUsername(req.body.username);
     const email = req.body.email;
     const password = req.body.password;
 
@@ -185,10 +211,18 @@ exports.postRegister = (req, res, next) => {
                         return res.redirect('/register');
                     });
                 } else {
-                    bcrypt.hash(password, 10)
-                        .then((hashed) => {
-                            const newUser = new User({ username, email, password: hashed });
-                            return newUser.save();
+                    bcrypt.hash(password + process.env.HASH_SALT_TEXT, 10)
+                        .then((hashed) => new User({ username, email, password: hashed }))
+                        .then((newUser) => {
+                            return Role.find({ defaultRole: true })
+                                .then((roles) => {
+                                    if (!roles.length) {
+                                        return newUser.save();
+                                    }
+
+                                    newUser.roles = roles;
+                                    newUser.save();
+                                })
                         })
                         .then(() => res.redirect('/login'))
                         .catch((err) => console.error(err));

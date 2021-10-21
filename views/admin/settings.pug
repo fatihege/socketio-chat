@@ -1,0 +1,25 @@
+extends ../layouts/admin
+
+block styles
+    link(rel="stylesheet" href="/css/admin/settings.css")
+
+block content
+    .form-container.settings-form
+        if successMessage
+            .alert.alert-success #{successMessage}
+
+        form(method="POST" action="/admin/settings")
+            input(type="hidden" name="_csrf" value=`${csrfToken}`)
+            .checkbox-group
+                if server.loginOnlyAdmins
+                    input(type="checkbox" checked="checked" id="login_only_admins" name="login_only_admins")
+                else
+                    input(type="checkbox" id="login_only_admins" name="login_only_admins")
+                label(for="login_only_admins") Only admins can login
+            .checkbox-group
+                if server.registrable
+                    input(type="checkbox" checked="checked" id="registrable" name="registrable")
+                else
+                    input(type="checkbox" id="registrable" name="registrable")
+                label(for="registrable") Guests can register
+            button(type="submit").btn.btn-primary Save

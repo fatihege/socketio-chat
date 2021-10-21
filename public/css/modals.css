@@ -48,6 +48,7 @@
 
 .modal .content {
     width: 100%;
+    height: max-content;
     padding: 10px 14px;
     color: var(--color-grey-too-light);
     cursor: default;

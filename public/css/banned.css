@@ -1,0 +1,20 @@
+.banned-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 100vh;
+    cursor: default;
+}
+
+.banned-container h1 {
+    font-size: 48px;
+    font-weight: 800;
+    color: var(--color-grey-light);
+}
+
+.banned-container p {
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--color-grey-too-light);
+}

@@ -1,0 +1,45 @@
+extends ../layouts/admin
+
+block styles
+    link(rel="stylesheet" href="/css/admin/users.css")
+
+block content
+    .curtain
+    if successMessage
+        .alert.alert-success #{successMessage}
+    else if flashMessage
+        .alert.alert-danger #{flashMessage}
+    .users-container
+        if !users.length
+            h3.info-text No users.
+        else
+            each user, i in users
+                .user
+                    .info
+                        .name
+                            if user._id.toString() === authUser._id.toString() || actionableUsers.find((u) => u._id.toString() === user._id.toString())
+                                a(href=`/admin/users/${user._id}`) #{user.username}
+                            else
+                                | #{user.username}
+                                if user.banned
+                                    span.tag Banned
+                    if actionableUsers.find((u) => u._id.toString() === user._id.toString())
+                        if user._id.toString() !== authUser._id.toString()
+                            .actions
+                                if userPermissions[validPermissions.BAN_USERS]
+                                    if user.banned
+                                        form(method="POST" action=`/admin/users/unban`)
+                                            input(type="hidden" name="_csrf" value=`${csrfToken}`)
+                                            button(type="submit" data-modal="unban-user" data-modal-values=`{"id":"${user._id}"}`).btn.btn-primary-reversed Unban
+                                    else
+                                        form(method="POST" action=`/admin/users/ban`)
+                                            input(type="hidden" name="_csrf" value=`${csrfToken}`)
+                                            button(type="submit" data-modal="ban-user" data-modal-values=`{"id":"${user._id}"}`).btn.btn-danger-reversed Ban
+                                form(method="POST" action=`/admin/users/deactivate`)
+                                    input(type="hidden" name="_csrf" value=`${csrfToken}`)
+                                    button(type="submit" data-modal="deactivate-user" data-modal-values=`{"id":"${user._id}"}`).btn.btn-danger-reversed Deactivate
+                                form(method="POST" action=`/admin/users/delete`)
+                                    input(type="hidden" name="_csrf" value=`${csrfToken}`)
+                                    button(type="submit" data-modal="delete-user" data-modal-values=`{"id":"${user._id}"}`).btn.btn-danger-reversed Delete
+block script
+    script(src="/js/modals.js")

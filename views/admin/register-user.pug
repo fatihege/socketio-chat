@@ -1,0 +1,21 @@
+extends ../layouts/admin
+
+block styles
+    link(rel="stylesheet" href="/css/form.css")
+
+block content
+    .form-container.register-user-form
+        h1.form-title Register User
+
+        if successMessage
+            .alert.alert-success #{successMessage}
+        else if flashMessage
+            .alert.alert-danger #{flashMessage}
+
+        form(method="POST" action="/admin/register-user")
+            input(type="hidden" name="_csrf" value=`${csrfToken}`)
+            input(type="text" name="username" placeholder="Username" value=`${inputValues ? inputValues.username : ''}` autofocus="on").input.input-primary
+            input(type="email" name="email" placeholder="Email" value=`${inputValues ? inputValues.email : ''}`).input.input-primary
+            input(type="password" name="password" placeholder="Password").input.input-primary
+            input(type="password" name="password_confirm" placeholder="Confirm Password").input.input-primary
+            button(type="submit").btn.btn-primary Save User

@@ -1,29 +1,41 @@
 extends ../layouts/socket
 
 block styles
+    link(rel="stylesheet" href="/css/markdown.css")
     link(rel="stylesheet" href="/css/chat.css")
 
 block content
     .curtain
     .chat-container
         .header
-            .name Fatih
+            .name
+                if isAdmin
+                    span.badge Admin
+                | #{username}
             .help
                 a(href="/help" target="_blank") Need help?
         .chat
-            .channels
-                span.title Rooms
-                ul
-                    li
-                        a(href="#").active general
+            .rooms(class=`${isAdmin ? 'admin' : ''}`)
+                .list
+                    span.title Rooms
+                        ul
+                            li
+                                a(href="#").active general
+                .account
+                    a(href="/edit-account").btn.btn-primary-reversed Edit Account
+                    if isAdmin
+                        a(href="/admin" target="_blank").btn.btn-white-reversed Admin Panel
             .messages
+                .loading
+                    .icon.animate
             .users
-                .online.none
-                    span.title Online Users
-                    ul
-                .offline.none
-                    span.title Offline Users
-                    ul
+                .list
+                    .online.none
+                        span.title Online Users
+                        ul
+                    .offline.none
+                        span.title Offline Users
+                        ul
                 .logout
                     form(method="POST" action="/logout")
                         input(type="hidden" name="_csrf" value=`${csrfToken}`)
@@ -37,10 +49,11 @@ block content
                         span
                         span
             form.message-form
-                textarea(name="message" rows="1" placeholder="Type a message..." autofocus="on")
+                textarea(name="message" rows="1" placeholder="Type a message..." autofocus="on" tabindex="1")
                 button(type="submit").btn.btn-primary Send
             .users-typing.hidden &nbsp;
 
 block script
+    script(src="/js/markdown.js")
     script(src="/js/modals.js")
     script(src="/js/chat.js")

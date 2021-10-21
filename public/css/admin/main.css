@@ -1,0 +1,65 @@
+@import "../main.css";
+
+.container {
+    width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+    display: flex;
+}
+
+.container .sidebar {
+    width: 20%;
+    min-width: 180px;
+    padding: 50px 10px 10px 20px;
+    height: 100vh;
+    min-height: 100vh;
+    position: relative;
+    border-right: 1px solid var(--color-dark-2);
+}
+
+.container .sidebar ul {
+    list-style-type: none;
+}
+
+.container .sidebar ul li a {
+    display: block;
+    text-decoration: none;
+    padding: 5px 10px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    margin-bottom: 3px;
+    color: var(--color-grey-light);
+}
+
+.container .sidebar ul li a:hover {
+    color: var(--color-grey-too-light);
+    background: var(--color-dark-blue-1);
+}
+
+.container .sidebar ul li a.active {
+    color: var(--color-white-grey);
+    background: var(--color-dark-blue-2);
+}
+
+.container .sidebar ul li a span.badge {
+    display: inline-block;
+    padding: 2px 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    margin-left: 5px;
+    background: var(--color-dark-2);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.container .content {
+    width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    padding: 20px;
+}
