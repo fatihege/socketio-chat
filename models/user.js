@@ -34,10 +34,15 @@ const userSchema = new mongoose.Schema({
     banned: {
         type: Boolean,
         default: false
+    },
+    admin: {
+        type: Boolean,
+        default: false
     }
 }, { timestamps: true });
 
 userSchema.methods.hasPermission = async function (permission) {
+    if (this.admin) return true;
     if (!this.roles.length) return false;
     if (!permissions.includes(permission)) return false;
     let hasPerm = false;
@@ -54,6 +59,7 @@ userSchema.methods.hasPermission = async function (permission) {
 }
 
 userSchema.methods.isAdmin = async function () {
+    if (this.admin && this.admin === true) return true;
     if (!this.roles.length) return false;
     const permissions = await this.getPermissions();
     let isAdmin = false;
@@ -80,10 +86,10 @@ userSchema.methods.getPermissions = async function () {
 }
 
 userSchema.methods.getHighestRole = async function () {
+    if (this.admin) return { order: -1 };
+
     let highestRole = null;
-
     await this.populate('roles');
-
     await Promise.all(this.roles.map((r) => {
         if (r.defaultRole || typeof r.order !== 'number') return;
         if (!highestRole) highestRole = r;

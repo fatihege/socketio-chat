@@ -11,6 +11,8 @@ const validPermissions = {
     MANAGE_ROLES: 'MANAGE_ROLES',
     MANAGE_USERS: 'MANAGE_USERS',
     REGISTER_USER: 'REGISTER_USER',
+    DELETE_USERS: 'DELETE_USERS',
+    EDIT_USERS: 'EDIT_USERS',
 };
 
 exports.validPermissions = validPermissions;
@@ -28,6 +30,8 @@ exports.permissions = [
     validPermissions.MANAGE_ROLES,
     validPermissions.MANAGE_USERS,
     validPermissions.REGISTER_USER,
+    validPermissions.DELETE_USERS,
+    validPermissions.EDIT_USERS,
 ];
 
 exports.adminPermissions = [
@@ -39,6 +43,8 @@ exports.adminPermissions = [
     validPermissions.MANAGE_ROLES,
     validPermissions.MANAGE_USERS,
     validPermissions.REGISTER_USER,
+    validPermissions.DELETE_USERS,
+    validPermissions.EDIT_USERS,
 ];
 
-exports.defaultPermissions = '011110000000';
+exports.defaultPermissions = '01111000000000';

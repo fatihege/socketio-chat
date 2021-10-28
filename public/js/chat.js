@@ -62,26 +62,6 @@ function messagesScrolledBottom() {
     return messagesContainer.scrollHeight - messagesContainer.scrollTop === messagesContainer.clientHeight;
 }
 
-function getCookie(cname) {
-    var name = cname + '=';
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
-
-    for (var i = 0; i <ca.length; i++) {
-        var c = ca[i];
-
-        while (c.charAt(0) === ' ') {
-            c = c.substring(1);
-        }
-
-        if (c.indexOf(name) === 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-
-    return '';
-}
-
 function escapeHTMLTags(text) {
     if (!text) {
         return text;
@@ -443,6 +423,11 @@ socket.on('load users', function (users) {
         li.dataset.id = user._id;
         li.innerHTML = '<a href="#"' + ((user._id === getCookie('hashed_id')) ? ' class="active"' : '') + '>' +
             escapeHTMLTags(user.username) +'</a>';
+
+        if (!user.activated) {
+            li.classList.add('danger');
+        }
+
         if (user.status === 'online') {
             onlineUsersList.classList.remove('none');
             onlineUl.appendChild(li);
@@ -500,6 +485,11 @@ socket.on('user online', function (user) {
     if (!ul.querySelector('li[data-id="' + user._id + '"]')) {
         var li = document.createElement('li');
         li.dataset.id = user._id;
+
+        if (!user.activated) {
+            li.classList.add('danger');
+        }
+
         li.innerHTML = '<a href="#"' + ((user._id === getCookie('hashed_id')) ?
             ' class="active"' : '') + '>' + escapeHTMLTags(user.username) + '</a>';
 
@@ -535,6 +525,11 @@ socket.on('user offline', function (user) {
     if (!ul.querySelector('li[data-id="' + user._id + '"]')) {
         var li = document.createElement('li');
         li.dataset.id = user._id;
+
+        if (!user.activated) {
+            li.classList.add('danger');
+        }
+
         li.innerHTML = '<a href="#"' + ((user._id === getCookie('hashed_id')) ?
             ' class="active"' : '') + '>' + escapeHTMLTags(user.username) + '</a>';
 

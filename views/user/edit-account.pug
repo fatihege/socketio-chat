@@ -7,7 +7,9 @@ block content
     .form-container.edit-account-form
         h1.form-title Edit Account
 
-        if flashMessage
+        if successMessage
+            .alert.alert-success #{successMessage}
+        else if flashMessage
             .alert.alert-danger #{flashMessage}
 
         form(method="POST" action="/edit-account")
@@ -16,3 +18,12 @@ block content
             button(type="submit").btn.btn-primary Save
         br
         a(href="/chat").btn.btn-primary-reversed Go Back
+
+block script
+    script(src="/js/socket.io.min.js")
+    script(src="/js/utils.js")
+    script
+        | var socket = io();
+        | socket.on('connect first', function () {
+        |     socket.emit('save user', getCookie('hashed_id'));
+        | });

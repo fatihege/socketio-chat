@@ -35,5 +35,8 @@ html(lang="en")
 
             .content
                 block content
-                
-        include ../includes/script
+        block script
+            script(src="/js/socket.io.min.js")
+            script(src="/js/utils.js")
+            script(src="/js/admin.js")
+            include ../includes/script

@@ -83,6 +83,12 @@
     text-decoration: none;
     margin-bottom: 5px;
     color: var(--color-grey-light);
+    overflow: hidden;
+}
+
+.chat-container .chat .rooms .list ul li.danger a, .chat-container .chat .users .list ul li.danger a {
+    background: var(--color-danger) !important;
+    color: #ffffff;
 }
 
 .chat-container .chat .rooms .list ul li a:hover, .chat-container .chat .users .list ul li a:hover {

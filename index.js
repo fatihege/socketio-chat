@@ -38,7 +38,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     cookie: {
-        maxAge: process.env.SESSION_AGE_SECONDS ? evaluate(process.env.SESSION_AGE_SECONDS) * 1000 : 0,
+        maxAge: process.env.SESSION_AGE_SECONDS ? (evaluate(process.env.SESSION_AGE_SECONDS) * 1000) : 0,
     },
     store,
 }));
@@ -88,6 +88,7 @@ app.use((req, res, next) => {
                 activated: user.activated,
                 roles: user.roles,
                 banned: user.banned,
+                admin: user.admin,
                 hasPermission: user.hasPermission,
                 isAdmin: user.isAdmin,
                 getPermissions: user.getPermissions,
@@ -100,12 +101,19 @@ app.use((req, res, next) => {
 });
 app.use((req, res, next) => {
     if (req.user && req.user.banned) {
-        if (req.url !== '/banned') {
-            return res.redirect('/banned');
-        }
+        if (req.url !== '/banned') return res.redirect('/banned');
+        else return next();
+    } else if (req.user && !req.user.activated) {
+        req.session.flashMessage = 'This account not activated.';
+        req.session.save((err) => {
+            if (err) console.error(err);
+            if (req.url !== '/login') return res.redirect('/login');
+            else return next();
+        });
+    } else {
+        return next();
     }
 
-    return next();
 });
 app.use(csurf({ cookie: false }));
 app.use((err, req, res, next) => {

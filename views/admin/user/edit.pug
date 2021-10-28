@@ -16,8 +16,11 @@ block content
         form(method="POST" action="/admin/users/edit")
             input(type="hidden" name="_csrf" value=`${csrfToken}`)
             input(type="hidden" name="_id" value=`${user._id}`)
-            input(type="text" name="username" placeholder="Username" value=`${user.username}` autofocus="on").input.input-primary
-            input(type="email" name="email" placeholder="Email" value=`${user.email}` autofocus="on").input.input-primary
+            if userPermissions[validPermissions.EDIT_USERS]
+                input(type="text" name="username" placeholder="Username" value=`${user.username}` autofocus="on").input.input-primary
+                input(type="email" name="email" placeholder="Email" value=`${user.email}` autofocus="on").input.input-primary
+            else
+                input(type="text" value=`${user.username}` disabled="disabled").input.input-primary.disabled
             each role in roles
                 .checkbox-group
                     if user.roles.find((r) => r._id.toString() === role._id.toString())

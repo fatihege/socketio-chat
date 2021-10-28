@@ -90,4 +90,16 @@ block content
                 else
                     input(type="checkbox" id="register_user" name="register_user")
                 label(for="register_user") Register User
+            .checkbox-group
+                if role.hasPermissionStrict(validPermissions.DELETE_USERS)
+                    input(type="checkbox" id="delete_users" name="delete_users" checked="checked")
+                else
+                    input(type="checkbox" id="delete_users" name="delete_users")
+                label(for="delete_users") Delete Users
+            .checkbox-group
+                if role.hasPermissionStrict(validPermissions.EDIT_USERS)
+                    input(type="checkbox" id="edit_users" name="edit_users" checked="checked")
+                else
+                    input(type="checkbox" id="edit_users" name="edit_users")
+                label(for="edit_users") Edit Users
             button(type="submit").btn.btn-primary Save Role

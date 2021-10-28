@@ -59,35 +59,26 @@ exports.postLogin = (req, res, next) => {
         req.session.flashMessage = errors[0];
         req.session.inputValues = req.body;
         req.session.save((err) => {
-            if (err) {
-                console.error(err);
-            }
-
+            if (err) console.error(err);
             return res.redirect('/login');
         });
     } else {
         User
             .findOne({ email })
-            .then((user) => {
+            .then(async (user) => {
                 if (!user) {
                     req.session.flashMessage = 'A user associated with this email address not found.';
                     req.session.inputValues = req.body;
                     req.session.save((err) => {
-                        if (err) {
-                            console.error(err);
-                        }
-
+                        if (err) console.error(err);
                         return res.redirect('/login');
                     });
                 } else {
-                    if (!user.activated) {
+                    if (!user.activated && !(await user.isAdmin())) {
                         req.session.flashMessage = 'This account not activated.';
                         req.session.inputValues = req.body;
                         req.session.save((err) => {
-                            if (err) {
-                                console.error(err);
-                            }
-
+                            if (err) console.error(err);
                             return res.redirect('/login');
                         });
 
@@ -101,10 +92,7 @@ exports.postLogin = (req, res, next) => {
                                     req.session.flashMessage = 'Only administrators can login this server.';
                                     req.session.inputValues = req.body;
                                     return req.session.save((err) => {
-                                        if (err) {
-                                            console.error(err);
-                                        }
-
+                                        if (err) console.error(err);
                                         return res.redirect('/login');
                                     });
                                 }
@@ -126,10 +114,7 @@ exports.postLogin = (req, res, next) => {
                                 req.session.inputValues = req.body;
 
                                 req.session.save((err) => {
-                                    if (err) {
-                                        console.error(err);
-                                    }
-
+                                    if (err) console.error(err);
                                     return res.redirect('/login');
                                 });
                             }
@@ -155,7 +140,7 @@ exports.getRegister = (req, res, next) => {
     });
 }
 
-exports.postRegister = (req, res, next) => {
+exports.postRegister = async (req, res, next) => {
     if (!req.server.registrable) {
         return res.redirect('/register');
     }
@@ -182,6 +167,7 @@ exports.postRegister = (req, res, next) => {
         }
     });
 
+    const userCount = await User.count({}).limit(1);
     const username = filterUsername(req.body.username);
     const email = req.body.email;
     const password = req.body.password;
@@ -190,10 +176,7 @@ exports.postRegister = (req, res, next) => {
         req.session.flashMessage = errors[0];
         req.session.inputValues = req.body;
         req.session.save((err) => {
-            if (err) {
-                console.error(err);
-            }
-
+            if (err) console.error(err);
             return res.redirect('/register');
         });
     } else {
@@ -204,10 +187,7 @@ exports.postRegister = (req, res, next) => {
                     req.session.flashMessage = 'There is a user belonging to this information.';
                     req.session.inputValues = req.body;
                     req.session.save((err) => {
-                        if (err) {
-                            console.error(err);
-                        }
-
+                        if (err) console.error(err);
                         return res.redirect('/register');
                     });
                 } else {
@@ -218,6 +198,11 @@ exports.postRegister = (req, res, next) => {
                                 .then((roles) => {
                                     if (!roles.length) {
                                         return newUser.save();
+                                    }
+
+                                    if (userCount < 1) {
+                                        newUser.admin = true;
+                                        newUser.activated = true;
                                     }
 
                                     newUser.roles = roles;

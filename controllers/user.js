@@ -18,10 +18,16 @@ exports.getChat = async (req, res, next) => {
 
 exports.getEditAccount = (req, res, next) => {
     const hashedUserID = encrypt(req.user._id.toString());
+    const flashMessage = req.session.flashMessage;
+    const successMessage = req.session.successMessage;
+    delete req.session.flashMessage;
+    delete req.session.successMessage;
     res.cookie('hashed_id', hashedUserID);
     res.render('user/edit-account', {
         title: 'Edit Account',
         username: req.user.username,
+        flashMessage,
+        successMessage,
     });
 }
 
@@ -42,10 +48,7 @@ exports.postEditAccount = (req, res, next) => {
         req.session.flashMessage = errors[0];
         req.session.inputValues = req.body;
         req.session.save((err) => {
-            if (err) {
-                console.error(err);
-            }
-
+            if (err) console.error(err);
             return res.redirect('/edit-account');
         });
     } else {
@@ -56,10 +59,7 @@ exports.postEditAccount = (req, res, next) => {
                     req.session.flashMessage = 'There is a user belonging to this information.';
                     req.session.inputValues = req.body;
                     req.session.save((err) => {
-                        if (err) {
-                            console.error(err);
-                        }
-
+                        if (err) console.error(err);
                         return res.redirect('/edit-account');
                     });
                 } else {
@@ -69,7 +69,13 @@ exports.postEditAccount = (req, res, next) => {
                             user.username = username;
                             return user.save();
                         })
-                        .then(() => res.redirect('/chat'))
+                        .then(() => {
+                            req.session.successMessage = 'You account has been successfully updated.'
+                            req.session.save((err) => {
+                                if (err) console.error(err);
+                                return res.redirect('/edit-account')
+                            });
+                        })
                         .catch((err) => console.error(err));
                 }
             })

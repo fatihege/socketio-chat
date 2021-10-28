@@ -17,13 +17,13 @@ block content
                 .user
                     .info
                         .name
-                            if user._id.toString() === authUser._id.toString() || actionableUsers.find((u) => u._id.toString() === user._id.toString())
+                            if (authUser.admin && user._id.toString() !== authUser._id.toString()) || (user._id.toString() !== authUser._id.toString() && actionableUsers.find((u) => u._id.toString() === user._id.toString()))
                                 a(href=`/admin/users/${user._id}`) #{user.username}
                             else
                                 | #{user.username}
                                 if user.banned
                                     span.tag Banned
-                    if actionableUsers.find((u) => u._id.toString() === user._id.toString())
+                    if authUser.admin || actionableUsers.find((u) => u._id.toString() === user._id.toString())
                         if user._id.toString() !== authUser._id.toString()
                             .actions
                                 if userPermissions[validPermissions.BAN_USERS]
@@ -38,8 +38,9 @@ block content
                                 form(method="POST" action=`/admin/users/deactivate`)
                                     input(type="hidden" name="_csrf" value=`${csrfToken}`)
                                     button(type="submit" data-modal="deactivate-user" data-modal-values=`{"id":"${user._id}"}`).btn.btn-danger-reversed Deactivate
-                                form(method="POST" action=`/admin/users/delete`)
-                                    input(type="hidden" name="_csrf" value=`${csrfToken}`)
-                                    button(type="submit" data-modal="delete-user" data-modal-values=`{"id":"${user._id}"}`).btn.btn-danger-reversed Delete
+                                if userPermissions[validPermissions.DELETE_USERS]
+                                    form(method="POST" action=`/admin/users/delete`)
+                                        input(type="hidden" name="_csrf" value=`${csrfToken}`)
+                                        button(type="submit" data-modal="delete-user" data-modal-values=`{"id":"${user._id}"}`).btn.btn-danger-reversed Delete
 block script
     script(src="/js/modals.js")

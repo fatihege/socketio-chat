@@ -3,7 +3,7 @@ const { validPermissions } = require('../constants');
 module.exports = (body) => {
     let permissions = [];
 
-    Object.keys(validPermissions).map((vp, i) => {
+    Object.keys(validPermissions).map((vp) => {
         if (Boolean(body[vp.toLowerCase()])) {
             permissions.push(1);
         } else {

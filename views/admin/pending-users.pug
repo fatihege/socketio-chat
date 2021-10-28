@@ -22,8 +22,9 @@ block content
                         form(method="POST" action=`/admin/users/activate`)
                             input(type="hidden" name="_csrf" value=`${csrfToken}`)
                             button(type="submit" data-modal="activate-user" data-modal-values=`{"id":"${user._id}"}`).btn.btn-primary-reversed Activate
-                        form(method="POST" action=`/admin/users/delete`)
-                            input(type="hidden" name="_csrf" value=`${csrfToken}`)
-                            button(type="submit" data-modal="delete-user" data-modal-values=`{"id":"${user._id}"}`).btn.btn-danger-reversed Delete
+                        if userPermissions[validPermissions.DELETE_USERS]
+                            form(method="POST" action=`/admin/users/delete`)
+                                input(type="hidden" name="_csrf" value=`${csrfToken}`)
+                                button(type="submit" data-modal="delete-user" data-modal-values=`{"id":"${user._id}"}`).btn.btn-danger-reversed Delete
 block script
     script(src="/js/modals.js")

@@ -5,6 +5,7 @@ const Role = require('../models/role');
 const validatePost = require('../utils/validate-post');
 const filterUsername = require('../utils/filter-username');
 const createRolePerms = require('../utils/create-role-perms');
+const getActionableUsers = require('../utils/get-actionable-users');
 const { validPermissions } = require('../constants');
 require('dotenv').config();
 
@@ -47,10 +48,7 @@ exports.postSettings = (req, res, next) => {
         .then(() => {
             req.session.successMessage = 'Settings saved successfully.';
             req.session.save((err) => {
-                if (err) {
-                    console.error(err);
-                }
-
+                if (err) console.error(err);
                 return res.redirect('/admin/settings');
             });
         })
@@ -110,10 +108,7 @@ exports.postRegisterUser = (req, res, next) => {
         req.session.flashMessage = errors[0];
         req.session.inputValues = req.body;
         req.session.save((err) => {
-            if (err) {
-                console.error(err);
-            }
-
+            if (err) console.error(err);
             return res.redirect('/admin/register-user');
         });
     } else {
@@ -124,10 +119,7 @@ exports.postRegisterUser = (req, res, next) => {
                     req.session.flashMessage = 'There is a user belonging to this information.';
                     req.session.inputValues = req.body;
                     req.session.save((err) => {
-                        if (err) {
-                            console.error(err);
-                        }
-
+                        if (err) console.error(err);
                         return res.redirect('/admin/register-user');
                     });
                 } else {
@@ -148,10 +140,7 @@ exports.postRegisterUser = (req, res, next) => {
                         .then(() => {
                             req.session.successMessage = 'User has been successfully created.'
                             req.session.save((err) => {
-                                if (err) {
-                                    console.error(err);
-                                }
-
+                                if (err) console.error(err);
                                 return res.redirect('/admin/register-user');
                             });
                         })
@@ -271,10 +260,7 @@ exports.postCreateRole = async (req, res, next) => {
         req.session.flashMessage = errors[0];
         req.session.inputValues = req.body;
         req.session.save((err) => {
-            if (err) {
-                console.error(err);
-            }
-
+            if (err) console.error(err);
             return res.redirect('/admin/roles/create');
         });
     } else {
@@ -295,10 +281,7 @@ exports.postCreateRole = async (req, res, next) => {
             .then(() => {
                 req.session.successMessage = 'Role has been successfully created';
                 req.session.save((err) => {
-                    if (err) {
-                        console.error(err);
-                    }
-
+                    if (err) console.error(err);
                     return res.redirect('/admin/roles');
                 })
             })
@@ -317,10 +300,7 @@ exports.postDeleteRole = async (req, res, next) => {
     if (errors) {
         req.session.flashMessage = errors[0];
         req.session.save((err) => {
-            if (err) {
-                console.error(err);
-            }
-
+            if (err) console.error(err);
             return res.redirect('/admin/roles');
         });
     }
@@ -344,10 +324,7 @@ exports.postDeleteRole = async (req, res, next) => {
                 .then(() => {
                     req.session.successMessage = 'The role has been successfully deleted.';
                     req.session.save((err) => {
-                        if (err) {
-                            console.error(err);
-                        }
-
+                        if (err) console.error(err);
                         return res.redirect('/admin/roles');
                     });
                 })
@@ -378,10 +355,7 @@ exports.postEditRole = async (req, res, next) => {
     if (errors) {
         req.session.flashMessage = errors[0];
         req.session.save((err) => {
-            if (err) {
-                console.error(err);
-            }
-
+            if (err) console.error(err);
             return res.redirect(`/admin/roles/${id}`);
         });
     } else {
@@ -389,12 +363,9 @@ exports.postEditRole = async (req, res, next) => {
             .findById(id)
             .then((role) => {
                 if (!role) {
-                    req.session.flashMessage = 'Role not found';
+                    req.session.flashMessage = 'Role not found.';
                     req.session.save((err) => {
-                        if (err) {
-                            console.error(err);
-                        }
-
+                        if (err) console.error(err);
                         return res.redirect('/admin/roles');
                     });
                 }
@@ -409,12 +380,9 @@ exports.postEditRole = async (req, res, next) => {
                 );
             })
             .then(() => {
-                req.session.successMessage = 'Role has been successfully updated';
+                req.session.successMessage = 'Role has been successfully updated.';
                 req.session.save((err) => {
-                    if (err) {
-                        console.error(err);
-                    }
-
+                    if (err) console.error(err);
                     return res.redirect('/admin/roles');
                 })
             })
@@ -461,10 +429,7 @@ exports.postActivateUser = async (req, res, next) => {
     if (errors) {
         req.session.flashMessage = errors[0];
         req.session.save((err) => {
-            if (err) {
-                console.error(err);
-            }
-
+            if (err) console.error(err);
             return res.redirect('/admin/pending-users');
         });
     } else {
@@ -481,12 +446,9 @@ exports.postActivateUser = async (req, res, next) => {
                 );
             })
             .then(() => {
-                req.session.successMessage = 'User has been successfully activated';
+                req.session.successMessage = 'User has been successfully activated.';
                 req.session.save((err) => {
-                    if (err) {
-                        console.error(err);
-                    }
-
+                    if (err) console.error(err);
                     return res.redirect('/admin/pending-users');
                 })
             })
@@ -507,10 +469,7 @@ exports.postDeactivateUser = async (req, res, next) => {
     if (errors) {
         req.session.flashMessage = errors[0];
         req.session.save((err) => {
-            if (err) {
-                console.error(err);
-            }
-
+            if (err) console.error(err);
             return res.redirect('/admin/users');
         });
     } else {
@@ -527,12 +486,9 @@ exports.postDeactivateUser = async (req, res, next) => {
                 );
             })
             .then(() => {
-                req.session.successMessage = 'User has been successfully deactivated';
+                req.session.successMessage = 'User has been successfully deactivated.';
                 req.session.save((err) => {
-                    if (err) {
-                        console.error(err);
-                    }
-
+                    if (err) console.error(err);
                     return res.redirect('/admin/users');
                 })
             })
@@ -551,10 +507,7 @@ exports.postDeleteUser = async (req, res, next) => {
     if (errors) {
         req.session.flashMessage = errors[0];
         req.session.save((err) => {
-            if (err) {
-                console.error(err);
-            }
-
+            if (err) console.error(err);
             return res.redirect('/admin/users');
         });
     }
@@ -570,10 +523,7 @@ exports.postDeleteUser = async (req, res, next) => {
                 .then(() => {
                     req.session.successMessage = 'The user has been successfully deleted.';
                     req.session.save((err) => {
-                        if (err) {
-                            console.error(err);
-                        }
-
+                        if (err) console.error(err);
                         return res.redirect('/admin/users');
                     });
                 })
@@ -593,45 +543,21 @@ exports.getUsers = async (req, res, next) => {
         .find({ activated: true })
         .sort({ createdAt: 1 })
         .then(async (users) => {
-            req.user.getHighestRole()
-                .then(async (authUserHighestRole) => {
-                    new Promise((resolve, reject) => {
-                        let actionableUsers = [];
-                        let i = 0;
-                        users.map((u) => {
-                            new Promise((resolve1, reject1) => {
-                                return resolve1(u.getHighestRole());
-                            })
-                                .then((userHighestRole) => {
-                                    if (authUserHighestRole.order < (userHighestRole ? userHighestRole.order : authUserHighestRole.order + 1)) {
-                                        actionableUsers.push(u);
-                                    }
-
-                                    i++;
-
-                                    if (i === users.length) {
-                                        return resolve(actionableUsers);
-                                    }
-                                });
-                        });
-                    })
-                        .then((actionableUsers) => {
-                            res.render('admin/users', {
-                                title: 'Users',
-                                path: '/users',
-                                server: req.server,
-                                counts: req.counts,
-                                validPermissions,
-                                userPermissions,
-                                successMessage,
-                                flashMessage,
-                                users,
-                                actionableUsers,
-                                authUser: req.user,
-                            });
-                        });
-                })
-                .catch((err) => console.error(err));
+            getActionableUsers(req, users, (actionableUsers) => {
+                res.render('admin/users', {
+                    title: 'Users',
+                    path: '/users',
+                    server: req.server,
+                    counts: req.counts,
+                    validPermissions,
+                    userPermissions,
+                    successMessage,
+                    flashMessage,
+                    users,
+                    actionableUsers,
+                    authUser: req.user,
+                });
+            });
         })
         .catch((err) => console.error(err));
 }
@@ -642,11 +568,12 @@ exports.getUserByID = async (req, res, next) => {
     User
         .findById(req.params.id)
         .populate('roles')
-        .then((user) => {
+        .then(async (user) => {
             if (!user) return res.redirect('/admin/users');
 
+            const userHighestRole = req.user.admin ? -1 : (await req.user.getHighestRole()).order;
             Role
-                .find({ defaultRole: false })
+                .find({ defaultRole: false, order: { $gt: userHighestRole } })
                 .then((roles) => {
                     res.render('admin/user/edit', {
                         title: `Edit User - ${user.username}`,
@@ -665,7 +592,9 @@ exports.getUserByID = async (req, res, next) => {
 }
 
 exports.postEditUser = async (req, res, next) => {
-    const errors = validatePost(req.body, {
+    const userPermissions = await req.user.getPermissions();
+    const userHighestRole = (await req.user.getHighestRole()).order;
+    const errors = userPermissions[validPermissions.EDIT_USERS] ? validatePost(req.body, {
         username: {
             name: 'Username',
             required: true,
@@ -679,55 +608,67 @@ exports.postEditUser = async (req, res, next) => {
             trim: true,
             pattern: validatePost().patterns.email
         },
-    });
+    }) : null;
 
     const id = req.body._id;
-    const username = filterUsername(req.body.username);
-    const email = req.body.email;
+    const username = req.body.username && userPermissions[validPermissions.EDIT_USERS] ? filterUsername(req.body.username) : null;
+    const email = req.body.email && userPermissions[validPermissions.EDIT_USERS] ? req.body.email : null;
     const roles = req.body.role || {};
 
     if (errors) {
         req.session.flashMessage = errors[0];
         req.session.save((err) => {
-            if (err) {
-                console.error(err);
-            }
-
+            if (err) console.error(err);
             return res.redirect(`/admin/users/${id}`);
         });
     } else {
         User
             .findOne({ _id: id, activated: true })
+            .populate('roles')
             .then((user) => {
                 if (!user) {
-                    req.session.flashMessage = 'User not found';
+                    req.session.flashMessage = 'User not found.';
                     req.session.save((err) => {
-                        if (err) {
-                            console.error(err);
-                        }
-
+                        if (err) console.error(err);
                         return res.redirect('/admin/users');
                     });
                 }
 
-                Object.keys(roles).map((r) => {
-                    if (!user.roles.find((r1) => r1._id.toString() === r)) user.roles.push(r);
-                });
-                user.username = username;
-                user.email = email;
+                user.roles = user.roles.filter((r) => r.defaultRole);
 
-                return User.updateOne(
-                    { _id: id },
-                    { $set: { username: user.username, email: user.email, roles: user.roles } }
-                );
+                new Promise((resolve) => {
+                    if (!Object.keys(roles).length) return resolve();
+                    let i = 0;
+                    Object.keys(roles).map((role) => {
+                        Role.findById(role)
+                            .then((r) => {
+                                if (
+                                    !user.roles.find((r1) => r1._id.toString() === r) &&
+                                    r.order > userHighestRole
+                                ) user.roles.push(r);
+
+                                i++;
+
+                                if (i >= Object.keys(roles).length) return resolve();
+                            });
+                    });
+                })
+                    .then(() => {
+                        if (userPermissions[validPermissions.EDIT_USERS] && username !== null && email !== null) {
+                            user.username = username;
+                            user.email = email;
+                        }
+
+                        return User.updateOne(
+                            { _id: id },
+                            { $set: { username: user.username, email: user.email, roles: user.roles } }
+                        );
+                    })
             })
             .then(() => {
-                req.session.successMessage = 'User has been successfully updated';
+                req.session.successMessage = 'User has been successfully updated.';
                 req.session.save((err) => {
-                    if (err) {
-                        console.error(err);
-                    }
-
+                    if (err) console.error(err);
                     return res.redirect('/admin/users');
                 })
             })
@@ -736,6 +677,8 @@ exports.postEditUser = async (req, res, next) => {
 }
 
 exports.postBanUser = async (req, res, next) => {
+    if (!(await req.user.hasPermission(validPermissions.BAN_USERS))) return res.redirect('/admin/users');
+
     const errors = validatePost(req.body, {
         id: {
             name: 'ID',
@@ -748,10 +691,7 @@ exports.postBanUser = async (req, res, next) => {
     if (errors) {
         req.session.flashMessage = errors[0];
         req.session.save((err) => {
-            if (err) {
-                console.error(err);
-            }
-
+            if (err) console.error(err);
             return res.redirect(`/admin/users`);
         });
     } else {
@@ -759,38 +699,35 @@ exports.postBanUser = async (req, res, next) => {
             .findOne({ _id: id, activated: true, banned: false })
             .then((user) => {
                 if (!user) {
-                    req.session.flashMessage = 'User not found';
+                    req.session.flashMessage = 'User not found.';
                     req.session.save((err) => {
-                        if (err) {
-                            console.error(err);
-                        }
-
+                        if (err) console.error(err);
                         return res.redirect('/admin/users');
                     });
                 }
 
-                user.banned = true;
+                getActionableUsers(req, [ user ], (actionableUsers) => {
+                    if (!actionableUsers || !actionableUsers.length) return res.redirect('/admin/users');
 
-                return User.updateOne(
-                    { _id: id },
-                    { $set: { banned: user.banned } }
-                );
-            })
-            .then(() => {
-                req.session.successMessage = 'User has been successfully banned';
-                req.session.save((err) => {
-                    if (err) {
-                        console.error(err);
-                    }
-
-                    return res.redirect('/admin/users');
-                })
+                    user.banned = true;
+                    User.updateOne({ _id: id }, { $set: { banned: user.banned } })
+                        .then(() => {
+                            req.session.successMessage = 'User has been successfully banned.';
+                            req.session.save((err) => {
+                                if (err) console.error(err);
+                                return res.redirect('/admin/users');
+                            })
+                        })
+                        .catch((err) => console.error(err));
+                });
             })
             .catch((err) => console.error(err));
     }
 }
 
 exports.postUnbanUser = async (req, res, next) => {
+    if (!(await req.user.hasPermission(validPermissions.BAN_USERS))) return res.redirect('/admin/users');
+
     const errors = validatePost(req.body, {
         id: {
             name: 'ID',
@@ -803,10 +740,7 @@ exports.postUnbanUser = async (req, res, next) => {
     if (errors) {
         req.session.flashMessage = errors[0];
         req.session.save((err) => {
-            if (err) {
-                console.error(err);
-            }
-
+            if (err) console.error(err);
             return res.redirect(`/admin/users`);
         });
     } else {
@@ -814,32 +748,27 @@ exports.postUnbanUser = async (req, res, next) => {
             .findOne({ _id: id, activated: true, banned: true })
             .then((user) => {
                 if (!user) {
-                    req.session.flashMessage = 'User not found';
+                    req.session.flashMessage = 'User not found.';
                     req.session.save((err) => {
-                        if (err) {
-                            console.error(err);
-                        }
-
+                        if (err) console.error(err);
                         return res.redirect('/admin/users');
                     });
                 }
 
-                user.banned = false;
+                getActionableUsers(req, [ user ], (actionableUsers) => {
+                    if (!actionableUsers || !actionableUsers.length) return res.redirect('/admin/users');
 
-                return User.updateOne(
-                    { _id: id },
-                    { $set: { banned: user.banned } }
-                );
-            })
-            .then(() => {
-                req.session.successMessage = 'User has been successfully unbanned';
-                req.session.save((err) => {
-                    if (err) {
-                        console.error(err);
-                    }
-
-                    return res.redirect('/admin/users');
-                })
+                    user.banned = false;
+                    User.updateOne({ _id: id }, { $set: { banned: user.banned } })
+                        .then(() => {
+                            req.session.successMessage = 'User has been successfully unbanned.';
+                            req.session.save((err) => {
+                                if (err) console.error(err);
+                                return res.redirect('/admin/users');
+                            })
+                        })
+                        .catch((err) => console.error(err));
+                });
             })
             .catch((err) => console.error(err));
     }
